@@ -169,9 +169,43 @@ export default function App() {
             <h3 className="text-lg font-semibold">{format(selectedDate, 'yyyy.MM.dd')}</h3>
             <input placeholder="Weight (kg)" type="number" value={editingLog.weight || ''} onChange={e => setEditingLog({...editingLog, weight: e.target.value})} className="bg-gray-100 p-2 rounded" />
             <div className="flex flex-col gap-2">
-              <input placeholder="Breakfast" value={editingLog.meals?.breakfast || ''} onChange={e => setEditingLog({...editingLog, meals: {...editingLog.meals, breakfast: e.target.value}})} className="bg-gray-100 p-2 rounded" />
-              <input placeholder="Lunch" value={editingLog.meals?.lunch || ''} onChange={e => setEditingLog({...editingLog, meals: {...editingLog.meals, lunch: e.target.value}})} className="bg-gray-100 p-2 rounded" />
-              <input placeholder="Dinner" value={editingLog.meals?.dinner || ''} onChange={e => setEditingLog({...editingLog, meals: {...editingLog.meals, dinner: e.target.value}})} className="bg-gray-100 p-2 rounded" />
+              {[
+                {label: 'Breakfast', key: 'breakfast'},
+                {label: 'Lunch', key: 'lunch'},
+                {label: 'Dinner', key: 'dinner'},
+              ].map(({label, key}) => (
+                <div key={key} className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-700">{label}</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setEditingLog({
+                            ...editingLog,
+                            meals: {
+                              ...editingLog.meals,
+                              [key]: reader.result as string,
+                            },
+                          });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="bg-gray-100 p-2 rounded text-sm"
+                  />
+                  {editingLog.meals?.[key as keyof typeof editingLog.meals] && (
+                    <img
+                      src={editingLog.meals?.[key as keyof typeof editingLog.meals]}
+                      alt={label}
+                      className="w-20 h-20 object-cover rounded mt-1"
+                    />
+                  )}
+                </div>
+              ))}
             </div>
             <input placeholder="Exercise" value={editingLog.exercise || ''} onChange={e => setEditingLog({...editingLog, exercise: e.target.value})} className="bg-gray-100 p-2 rounded" />
             <div className="flex gap-2 mt-4">
