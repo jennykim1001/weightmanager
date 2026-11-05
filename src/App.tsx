@@ -4,6 +4,7 @@ import {ChevronLeft, ChevronRight, Target} from 'lucide-react';
 import {clsx, type ClassValue} from 'clsx';
 import {twMerge} from 'tailwind-merge';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
+import {PWAInstallButton} from './PWAInstallButton';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -75,6 +76,7 @@ export default function App() {
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold">Health Tracker</h1>
           <div className="flex items-center gap-2">
+            <PWAInstallButton />
             <button onClick={() => setShowStats(!showStats)} className="p-2 bg-gray-100 rounded-lg text-sm font-medium">
               {showStats ? 'Calendar' : 'Stats'}
             </button>
