@@ -145,7 +145,10 @@ export default function App() {
                 key={dateKey}
                 onClick={() => {
                   setSelectedDate(day);
-                  setEditingLog(log || {});
+                  setEditingLog({
+                    ...log,
+                    meals: log?.meals || { breakfast: '', lunch: '', dinner: '' }
+                  });
                 }}
                 className={cn(
                   "h-20 rounded-lg p-1 text-left text-xs border border-gray-200 flex flex-col gap-1",
