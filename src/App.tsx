@@ -168,17 +168,18 @@ export default function App() {
           <div className="bg-white p-6 rounded-lg w-full max-w-sm flex flex-col gap-4 border border-gray-200">
             <h3 className="text-lg font-semibold">{format(selectedDate, 'yyyy.MM.dd')}</h3>
             <input placeholder="Weight (kg)" type="number" value={editingLog.weight || ''} onChange={e => setEditingLog({...editingLog, weight: e.target.value})} className="bg-gray-100 p-2 rounded" />
-            <div className="flex flex-col gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {[
                 {label: 'Breakfast', key: 'breakfast'},
                 {label: 'Lunch', key: 'lunch'},
                 {label: 'Dinner', key: 'dinner'},
               ].map(({label, key}) => (
-                <div key={key} className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-gray-700">{label}</label>
+                <div key={key} className="flex flex-col gap-1 items-center">
                   <input
                     type="file"
                     accept="image/*"
+                    id={`file-${key}`}
+                    className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
@@ -195,13 +196,18 @@ export default function App() {
                         reader.readAsDataURL(file);
                       }
                     }}
-                    className="bg-gray-100 p-2 rounded text-sm"
                   />
+                  <label
+                    htmlFor={`file-${key}`}
+                    className="cursor-pointer bg-gray-100 p-2 rounded text-xs font-medium text-center w-full"
+                  >
+                    {label}
+                  </label>
                   {editingLog.meals?.[key as keyof typeof editingLog.meals] && (
                     <img
                       src={editingLog.meals?.[key as keyof typeof editingLog.meals]}
                       alt={label}
-                      className="w-20 h-20 object-cover rounded mt-1"
+                      className="w-16 h-16 object-cover rounded mt-1"
                     />
                   )}
                 </div>
